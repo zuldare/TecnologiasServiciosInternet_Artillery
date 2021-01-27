@@ -51,6 +51,14 @@ Los ficheros entregables serán los siguientes:
     - Ejemplo 1: “$[0].atributo”
     - Ejemplo 2: “$.atributoLista[0].atributo
  
+
+# Uso
+
+## Lanzar artillery
+```script shell
+    $ artillery run solucion.yml
+    $ $ artillery run -e staging solucion.yml
+```
 # Author
 
 👤 **Jaime Hernández Ortiz**

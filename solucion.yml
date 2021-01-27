@@ -1,0 +1,44 @@
+# =========== CONFIG
+# This section contains al the configuration needed for the test, such as:
+#     target, environments, phases, payloads, etc
+config:
+  environments:
+    staging:
+      target: "http://127.0.0.1:8080"
+      phases:
+        - duration: 40     # test duration
+          arrivalRate: 5   # arrival requests rate
+          maxVusers: 8
+          name: "Unique Artillery Phase for Books Application"
+
+      ensure:
+        p95: 100  # asserts 95% of requests have <100ms latency
+        # Accepted error rate is 0% --> artillery automatically gives us that data when not.
+
+#      payload:
+#        path: "books.csv"
+#        fields:
+#          - "title"
+#          - "description"
+
+
+# =========== SCENARIOS
+# This section contains the description of the actions that users will do.
+scenarios:
+  - name: "Escenario 1: Consulta del primer libro"
+#    weight: 7 # 70%
+    flow:
+      - get:
+          url: "/api/books/"
+
+#  - name: "Escenario 2: Creación de un Libro"
+#    weight: 2 # 20%
+#    flow:
+#      - get:
+#          url: "/api/books/"
+#
+#  - name: "Escenario 3: Borrado de un Libro"
+#    weight: 1 # 10%
+#    flow:
+#      - get:
+#          url: "/api/books/"
