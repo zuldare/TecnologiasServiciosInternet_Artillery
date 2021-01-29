@@ -30,25 +30,61 @@ config:
         fields:
           - "title"
           - "description"
-        #order: "sequence"
+
+      variables:
+        username:
+          - "user"
+          - "admin"
+        password:
+          - "pass"
 
 
 # =========== SCENARIOS
 # This section contains the description of the actions that users will do.
 scenarios:
-  - name: "Scenario 1: Request the first book. A non-logged user retrieves all books and request the first to see more info"
-    #weight: 7 # 70%
+#  - name: "Scenario 1: Request the first book. A non-logged user retrieves all books and request the first to see more info"
+#    weight: 7 # 70%
+#    flow:
+#      - get:
+#          url: "/api/books/"
+#          capture:
+#            json: "$[0].id"
+#            as: id
+#          expect:
+#            - statusCode: 200
+#            - contentType: json
+#      - get:
+#          url: "/api/books/{{id}}"
+#          capture:
+#            json: "$.id"
+#            as: idToCheck
+#          expect:
+#            - statusCode: 200
+#            - contentType: json
+#            - equals:
+#              - "{{id}}"
+#              - "{{idToCheck}}"
+
+  - name: "Scenario 2. Book creation. A logged user creates a book and then request it in order to check it."
+    weight: 2 # 20%
     flow:
-      - get:
+      - post:
           url: "/api/books/"
+          auth:
+            user: "{{username}}"
+            pass: "{{password}}"
+          json:
+            title: "{{title}}"
+            description: "{{description}}"
           capture:
-            json: "$[0].id"
-            as: id
+            json: "$.id"
+            as: idBookCreated
           expect:
-            - statusCode: 200
+            - statusCode: 201
             - contentType: json
+
       - get:
-          url: "/api/books/{{id}}"
+          url: "/api/books/{{idBookCreated}}"
           capture:
             json: "$.id"
             as: idToCheck
@@ -56,14 +92,8 @@ scenarios:
             - statusCode: 200
             - contentType: json
             - equals:
-              - "{{id}}"
+              - "{{idBookCreated}}"
               - "{{idToCheck}}"
-
-#  - name: "Escenario 2: Creación de un Libro"
-#    weight: 2 # 20%
-#    flow:
-#      - get:
-#          url: "/api/books/"
 #
 #  - name: "Escenario 3: Borrado de un Libro"
 #    weight: 1 # 10%
