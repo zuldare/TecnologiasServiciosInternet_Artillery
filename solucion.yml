@@ -49,6 +49,15 @@ scenarios:
             - contentType: json
       - get:
           url: "/api/books/{{id}}"
+          capture:
+            json: "$.id"
+            as: idToCheck
+          expect:
+            - statusCode: 200
+            - contentType: json
+            - equals:
+              - "{{id}}"
+              - "{{idToCheck}}"
 
 #  - name: "Escenario 2: Creación de un Libro"
 #    weight: 2 # 20%
