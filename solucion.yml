@@ -4,32 +4,51 @@
 config:
   environments:
     staging:
-      target: "http://127.0.0.1:8080"
+      target: "https://127.0.0.1:8443"
+
       phases:
         - duration: 40     # test duration
           arrivalRate: 5   # arrival requests rate
           maxVusers: 8
           name: "Unique Artillery Phase for Books Application"
 
+      http:
+        pool: 8 # all users will use the same 8 connections
+
       ensure:
         p95: 100  # asserts 95% of requests have <100ms latency
         # Accepted error rate is 0% --> artillery automatically gives us that data when not.
 
-#      payload:
-#        path: "books.csv"
-#        fields:
-#          - "title"
-#          - "description"
+      tls:
+        rejectUnauthorized: false   # Authorized self-signed certs
+
+      plugins:
+        expect: {}  # Plugin needed in order to do assertions.
+
+      payload:
+        path: "books.csv"
+        fields:
+          - "title"
+          - "description"
+        #order: "sequence"
 
 
 # =========== SCENARIOS
 # This section contains the description of the actions that users will do.
 scenarios:
-  - name: "Escenario 1: Consulta del primer libro"
-#    weight: 7 # 70%
+  - name: "Scenario 1: Request the first book. A non-logged user retrieves all books and request the first to see more info"
+    #weight: 7 # 70%
     flow:
       - get:
           url: "/api/books/"
+          capture:
+            json: "$[0].id"
+            as: id
+          expect:
+            - statusCode: 200
+            - contentType: json
+      - get:
+          url: "/api/books/{{id}}"
 
 #  - name: "Escenario 2: Creación de un Libro"
 #    weight: 2 # 20%

@@ -57,7 +57,7 @@ Los ficheros entregables serán los siguientes:
 ## Lanzar artillery
 ```script shell
     $ artillery run solucion.yml
-    $ $ artillery run -e staging solucion.yml
+    $ artillery run -e staging solucion.yml
 ```
 # Author
 
