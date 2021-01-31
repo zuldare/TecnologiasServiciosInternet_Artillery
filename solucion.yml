@@ -18,6 +18,7 @@ config:
       ensure:
         p95: 100  # asserts 95% of requests have <100ms latency
         # Accepted error rate is 0% --> artillery automatically gives us that data when not.
+        maxErrorRate: 0
 
       tls:
         rejectUnauthorized: false   # Authorized self-signed certs
